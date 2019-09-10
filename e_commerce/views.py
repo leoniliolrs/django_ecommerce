@@ -25,6 +25,8 @@ def contact_page(request):
         "content": "Bem-vindo a página de contato",
         "form": contact_form
     }
-    if request.method == "POST":
-        print(request.POST)
+    if contact_form.is_valid():
+        print(contact_form.cleaned_data)
+    #if request.method == "POST":
+    #    print(request.POST)
     return render(request, "contact/view.html", context)
