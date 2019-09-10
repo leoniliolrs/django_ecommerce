@@ -19,14 +19,16 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from products.views import ProductListView
 from .views import home_page, about_page, contact_page, login_page, register_page
 
 urlpatterns = [
 	path('', home_page),
 	path('about/', about_page),
 	path('contact/', contact_page),
-        path('login/', login_page),
-        path('register/', register_page),
+    path('login/', login_page),
+    path('register/', register_page),
+    path('products/', ProductListView.as_view()),
 	path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:
