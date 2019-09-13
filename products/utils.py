@@ -1,29 +1,27 @@
-import random
-import string
 
-from django.utils.text import slugify
+from django.conf import settings
+from django.conf.urls.static import static
 
+from django.contrib import admin
+from django.urls import path, include
 
-def random_string_generator(size = 10, chars = string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+from .views import (home_page,
+                    about_page,
+                    contact_page,
+                    login_page,
+                    register_page
+)
 
+urlpatterns = [
+    path('', home_page),
+    path('about/', about_page),
+    path('contact/', contact_page),
+    path('login/', login_page),
+    path('register/', register_page),
+    path('products/', include("products.urls")),
+    path('admin/', admin.site.urls),
+]
 
-def unique_slug_generator(instance, new_slug=None):
-    """
-    This is for a Django project and it assumes your instance
-    has a model with a slug field and a title character (char) field.
-    """
-    if new_slug is not None:
-        slug = new_slug
-    else:
-        slug = slugify(instance.title)
-
-    Klass = instance.__class__
-    qs_exists = Klass.objects.filter(slug = slug).exists()
-    if qs_exists:
-        new_slug = "{slug}-{randstr}".format(
-                    slug = slug,
-                    randstr = random_string_generator(size = 4)
-                )
-        return unique_slug_generator(instance, new_slug = new_slug)
-    return slug
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
